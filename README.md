@@ -33,6 +33,7 @@ phishshield-academy/
 │   └── init.sql            # Schema and Seed Data
 ├── docker-compose.yml      # Container Orchestration
 └── README.md               # Project Documentation
+```
 
 ### Component Breakdown
 * **Frontend (Angular 17+):** A standalone, responsive SPA (Single Page Application) that communicates with the backend via RESTful APIs.
