@@ -1,0 +1,81 @@
+<div class="app-container">
+  
+  <header class="main-header">
+    <h1>PhishShield Academy</h1>
+    <nav>
+      <button 
+        (click)="viewMode = 'quiz'" 
+        [class.active]="viewMode === 'quiz'">
+        Take Quiz
+      </button>
+      <button 
+        (click)="viewMode = 'learn'" 
+        [class.active]="viewMode === 'learn'">
+        Learn Facts
+      </button>
+    </nav>
+  </header>
+
+  <!-- QUIZ VIEW -->
+  <div *ngIf="viewMode === 'quiz'" class="fade-in">
+    <div *ngIf="scenarios.length > 0; else loading">
+      <div *ngIf="currentIndex < scenarios.length; else results">
+        <p class="progress-text">Progress: {{ currentIndex + 1 }} / {{ scenarios.length }}</p>
+        
+        <div class="quiz-card">
+          <div class="card-header">
+            <h3 class="subject-line">Subject: {{ scenarios[currentIndex].subject }}</h3>
+            <p class="sender-info"><strong>From:</strong> {{ scenarios[currentIndex].sender }}</p>
+          </div>
+          <div class="card-body">
+            <p class="email-content">{{ scenarios[currentIndex].content }}</p>
+          </div>
+        </div>
+
+        <div class="action-buttons" *ngIf="!showFeedback">
+          <button (click)="checkAnswer(true)" class="btn-phish">🚨 Report Phish</button>
+          <button (click)="checkAnswer(false)" class="btn-safe">✅ Looks Safe</button>
+        </div>
+
+        <div *ngIf="showFeedback" class="feedback-panel">
+          <h2 [ngClass]="lastResult === 'Correct!' ? 'text-success' : 'text-danger'">
+            {{ lastResult }}
+          </h2>
+          <p class="explanation"><strong>The Catch:</strong> {{ scenarios[currentIndex].explanation }}</p>
+          <button (click)="nextQuestion()" class="btn-next">Next Scenario →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LEARN VIEW -->
+  <div *ngIf="viewMode === 'learn'" class="fade-in">
+    <h2>Cyber Security Facts of the Day</h2>
+    <div class="fact-grid">
+      <div *ngFor="let f of dailyFacts" class="fact-card">
+        <h4>💡 {{ f.title }}</h4>
+        <p>{{ f.fact }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULTS TEMPLATE -->
+  <ng-template #results>
+    <div class="results-container">
+      <h2>🎉 Training Complete!</h2>
+      <p class="final-score">Score: <strong>{{ score }} / {{ scenarios.length }}</strong></p>
+      <button (click)="currentIndex = 0; score = 0; showFeedback = false;" class="btn-restart">
+        Restart Quiz
+      </button>
+    </div>
+  </ng-template>
+
+  <!-- LOADING TEMPLATE -->
+  <ng-template #loading>
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Syncing with Security Database...</p>
+    </div>
+  </ng-template>
+
+</div>
